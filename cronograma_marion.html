@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cronograma — Marion Cap. 6 & 7</title>
+  <style>
+    :root {
+      --bg: #0d0f1a;
+      --surface: #161929;
+      --surface2: #1e2235;
+      --border: #2a3050;
+      --accent6: #4f8ef7;
+      --accent7: #a259f7;
+      --accent6-dim: rgba(79,142,247,0.12);
+      --accent7-dim: rgba(162,89,247,0.12);
+      --text: #e2e8f0;
+      --muted: #7a8499;
+      --done: #22c97a;
+      --done-dim: rgba(34,201,122,0.12);
+      --warn: #f7a935;
+      --radius: 12px;
+      --transition: 0.22s cubic-bezier(.4,0,.2,1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0 0 60px;
+    }
+
+    /* ── Header ─────────────────────────────────── */
+    header {
+      background: linear-gradient(135deg, #0d1535 0%, #13102a 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 36px 32px 28px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header h1 {
+      font-size: clamp(1.1rem, 2.5vw, 1.55rem);
+      font-weight: 700;
+      letter-spacing: .01em;
+      color: #fff;
+    }
+    header h1 span { color: var(--accent6); }
+
+    .subtitle {
+      font-size: .85rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .progress-bar-wrap {
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .progress-track {
+      flex: 1;
+      height: 8px;
+      background: var(--surface2);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent6), var(--accent7));
+      border-radius: 99px;
+      transition: width .5s ease;
+      width: 0%;
+    }
+    .progress-label {
+      font-size: .8rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    #pct { color: var(--text); font-weight: 600; }
+
+    /* ── Filters ─────────────────────────────────── */
+    .filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 20px 32px 0;
+    }
+    .filter-btn {
+      font-size: .78rem;
+      padding: 5px 14px;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      cursor: pointer;
+      transition: var(--transition);
+      user-select: none;
+    }
+    .filter-btn:hover { border-color: var(--accent6); color: var(--text); }
+    .filter-btn.active {
+      background: var(--accent6-dim);
+      border-color: var(--accent6);
+      color: var(--accent6);
+      font-weight: 600;
+    }
+    .filter-btn.cap7.active {
+      background: var(--accent7-dim);
+      border-color: var(--accent7);
+      color: var(--accent7);
+    }
+
+    /* ── Main layout ─────────────────────────────── */
+    main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      padding: 28px 32px 0;
+    }
+
+    @media (max-width: 860px) {
+      main { grid-template-columns: 1fr; }
+      header, .filters, main { padding-left: 18px; padding-right: 18px; }
+    }
+
+    /* ── Chapter columns ─────────────────────────── */
+    .chapter-col h2 {
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-weight: 700;
+      padding: 0 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cap6 h2 { color: var(--accent6); }
+    .cap7 h2 { color: var(--accent7); }
+    .badge {
+      font-size: .65rem;
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-weight: 600;
+      letter-spacing: .05em;
+    }
+    .cap6 .badge { background: var(--accent6-dim); color: var(--accent6); }
+    .cap7 .badge { background: var(--accent7-dim); color: var(--accent7); }
+
+    /* ── Timeline ────────────────────────────────── */
+    .timeline {
+      position: relative;
+      padding-left: 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    /* ── Topic card ──────────────────────────────── */
+    .topic {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: var(--transition);
+      user-select: none;
+    }
+    .topic::before {
+      content: '';
+      position: absolute;
+      left: -23px;
+      top: 18px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border);
+      border: 2px solid var(--bg);
+      transition: var(--transition);
+    }
+    .topic:hover {
+      border-color: var(--accent6);
+      background: var(--surface2);
+      transform: translateX(2px);
+    }
+    .cap7 .topic:hover { border-color: var(--accent7); }
+
+    .topic.done {
+      border-color: var(--done);
+      background: var(--done-dim);
+    }
+    .topic.done::before { background: var(--done); }
+
+    .topic.hidden { display: none; }
+
+    .topic-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .check-circle {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+      transition: var(--transition);
+    }
+    .topic.done .check-circle {
+      background: var(--done);
+      border-color: var(--done);
+    }
+    .check-circle svg { opacity: 0; transition: var(--transition); }
+    .topic.done .check-circle svg { opacity: 1; }
+
+    .topic-title {
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--text);
+      flex: 1;
+      line-height: 1.4;
+    }
+    .topic.done .topic-title { color: var(--done); text-decoration: line-through; opacity: .8; }
+
+    .difficulty {
+      font-size: .65rem;
+      padding: 2px 7px;
+      border-radius: 99px;
+      font-weight: 700;
+      letter-spacing: .05em;
+      flex-shrink: 0;
+    }
+    .diff-easy   { background: rgba(34,201,122,.15); color: #22c97a; }
+    .diff-medium { background: rgba(247,169,53,.15);  color: #f7a935; }
+    .diff-hard   { background: rgba(247,89,89,.15);   color: #f75959; }
+
+    /* ── Expandable body ─────────────────────────── */
+    .topic-body {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height .35s cubic-bezier(.4,0,.2,1), opacity .3s ease;
+      opacity: 0;
+    }
+    .topic-body.open {
+      max-height: 600px;
+      opacity: 1;
+    }
+    .topic-body-inner {
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      margin-top: 12px;
+    }
+    .topic-desc {
+      font-size: .82rem;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 10px;
+    }
+    .subtopics {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .subtopics li {
+      font-size: .78rem;
+      color: #8fa3c7;
+      padding-left: 14px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .subtopics li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--accent6);
+    }
+    .cap7 .subtopics li::before { color: var(--accent7); }
+
+    .meta-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .meta-pill {
+      font-size: .7rem;
+      padding: 3px 9px;
+      border-radius: 99px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .meta-pill strong { color: var(--text); }
+
+    /* ── Stats strip ─────────────────────────────── */
+    .stats-strip {
+      display: flex;
+      gap: 12px;
+      padding: 22px 32px 0;
+      flex-wrap: wrap;
+    }
+    .stat-card {
+      flex: 1;
+      min-width: 130px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+    }
+    .stat-label { font-size: .7rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+    .stat-value { font-size: 1.6rem; font-weight: 800; margin-top: 2px; color: var(--text); }
+    .stat-value.blue { color: var(--accent6); }
+    .stat-value.purple { color: var(--accent7); }
+    .stat-value.green { color: var(--done); }
+
+    @media (max-width: 860px) { .stats-strip { padding-left: 18px; padding-right: 18px; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Marion — <span>Capítulos 6 & 7</span></h1>
+  <p class="subtitle">Classical Dynamics of Particles and Systems · Cronograma Interativo</p>
+  <div class="progress-bar-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-label"><span id="pct">0%</span> concluído</span>
+  </div>
+</header>
+
+<div class="filters">
+  <button class="filter-btn active" data-filter="all">Todos</button>
+  <button class="filter-btn active cap6" data-filter="cap6">Cap. 6 — Cálculo de Variações</button>
+  <button class="filter-btn cap7" data-filter="cap7">Cap. 7 — Lagrangiana & Hamiltoniana</button>
+  <button class="filter-btn" data-filter="pending">Pendentes</button>
+  <button class="filter-btn" data-filter="done">Concluídos</button>
+</div>
+
+<div class="stats-strip">
+  <div class="stat-card">
+    <div class="stat-label">Total de Tópicos</div>
+    <div class="stat-value" id="statTotal">—</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Cap. 6 Concluídos</div>
+    <div class="stat-value blue" id="statCap6">0</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Cap. 7 Concluídos</div>
+    <div class="stat-value purple" id="statCap7">0</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Total Concluídos</div>
+    <div class="stat-value green" id="statDone">0</div>
+  </div>
+</div>
+
+<main>
+  <!-- CAP 6 -->
+  <div class="chapter-col cap6">
+    <h2>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Capítulo 6
+      <span class="badge">Cálculo de Variações</span>
+    </h2>
+    <div class="timeline" id="timeline-cap6"></div>
+  </div>
+
+  <!-- CAP 7 -->
+  <div class="chapter-col cap7">
+    <h2>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+      Capítulo 7
+      <span class="badge">Lagrangiana & Hamiltoniana</span>
+    </h2>
+    <div class="timeline" id="timeline-cap7"></div>
+  </div>
+</main>
+
+<script>
+/* ═══════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════ */
+const data = {
+  cap6: [
+    {
+      id: 'c6-1',
+      title: 'Introdução ao Cálculo de Variações',
+      difficulty: 'easy',
+      desc: 'Motivação histórica e conexão com a mecânica. O que significa "extremizar" um funcional e por que isso é fundamental em física.',
+      subtopics: [
+        'Problema da braquistócrona',
+        'Diferença entre funcional e função',
+        'Visão geral do método de Euler',
+      ],
+      hours: 2, section: '6.1–6.2',
+    },
+    {
+      id: 'c6-2',
+      title: 'Enunciado do Problema Variacional',
+      difficulty: 'medium',
+      desc: 'Formulação matemática do problema: encontrar a função y(x) que extremiza o funcional J[y] = ∫ f(y, y′, x) dx com condições de contorno fixas.',
+      subtopics: [
+        'Família de curvas y(x, α)',
+        'Variação δy e condições de contorno',
+        'Condição necessária de extremo',
+      ],
+      hours: 3, section: '6.2',
+    },
+    {
+      id: 'c6-3',
+      title: 'Equação de Euler–Lagrange',
+      difficulty: 'medium',
+      desc: 'Derivação da equação diferencial que toda função extremizante deve satisfazer. Ponto central do capítulo.',
+      subtopics: [
+        'Derivação via δJ = 0',
+        'Lema fundamental do cálculo de variações',
+        '∂f/∂y − d/dx(∂f/∂y′) = 0',
+        'Aplicação: geodésicas no plano',
+      ],
+      hours: 4, section: '6.3',
+    },
+    {
+      id: 'c6-4',
+      title: 'Segunda Forma da Equação de Euler',
+      difficulty: 'medium',
+      desc: 'Forma alternativa útil quando f não depende explicitamente de x: f − y′(∂f/∂y′) = constante.',
+      subtopics: [
+        'Dedução da forma conservada',
+        'Aplicação: superfície de revolução mínima (catenária)',
+        'Braquistócrona resolvida',
+      ],
+      hours: 3, section: '6.4',
+    },
+    {
+      id: 'c6-5',
+      title: 'Funções com Várias Variáveis Dependentes',
+      difficulty: 'medium',
+      desc: 'Generalização para funcionais que dependem de múltiplas funções y₁(x), y₂(x), … Cada variável gera sua própria equação de Euler.',
+      subtopics: [
+        'Sistema de equações de Euler',
+        'Exemplo: problema de dois corpos em coordenadas generalizadas',
+      ],
+      hours: 2, section: '6.5',
+    },
+    {
+      id: 'c6-6',
+      title: 'Vínculos e Multiplicadores de Lagrange',
+      difficulty: 'hard',
+      desc: 'Extremização com condições auxiliares (vínculos). Uso dos multiplicadores de Lagrange λ(x) para incorporar os vínculos diretamente nas equações.',
+      subtopics: [
+        'Vínculo isoperimétrico',
+        'Equações de Euler modificadas',
+        'Interpretação física de λ',
+        'Exemplo: corda com comprimento fixo',
+      ],
+      hours: 4, section: '6.6',
+    },
+    {
+      id: 'c6-7',
+      title: 'A Notação δ (Variação)',
+      difficulty: 'easy',
+      desc: 'Introdução ao operador variacional δ como diferencial em espaço de funções. Regras operacionais e relação com a diferencial ordinária d.',
+      subtopics: [
+        'Propriedades de δ: linearidade, comutação com ∫ e d/dx',
+        'Notação δJ = 0 como princípio de estacionaridade',
+        'Preparação para o Princípio de Hamilton',
+      ],
+      hours: 2, section: '6.7',
+    },
+  ],
+
+  cap7: [
+    {
+      id: 'c7-1',
+      title: 'Introdução e Contexto',
+      difficulty: 'easy',
+      desc: 'Por que precisamos de uma nova formulação da mecânica? Limitações das equações de Newton em sistemas com vínculos e coordenadas não cartesianas.',
+      subtopics: [
+        'Vínculos holonômicos e não holonômicos',
+        'Graus de liberdade',
+        'Vantagens da abordagem lagrangiana',
+      ],
+      hours: 1, section: '7.1',
+    },
+    {
+      id: 'c7-2',
+      title: 'Princípio de Hamilton',
+      difficulty: 'medium',
+      desc: 'O Princípio da Ação Estacionária: o movimento real de um sistema entre dois instantes extremiza a ação S = ∫ L dt, onde L = T − V.',
+      subtopics: [
+        'Definição da ação S',
+        'Lagrangiana L = T − V',
+        'Equivalência com as leis de Newton para sistemas conservativos',
+        'Princípio de Hamilton como postulado fundamental',
+      ],
+      hours: 3, section: '7.2',
+    },
+    {
+      id: 'c7-3',
+      title: 'Coordenadas Generalizadas',
+      difficulty: 'medium',
+      desc: 'Liberdade de escolher qualquer conjunto de coordenadas independentes qᵢ que descrevam completamente o sistema, respeitando os vínculos.',
+      subtopics: [
+        'Definição de qᵢ, q̇ᵢ',
+        'Transformação entre coordenadas cartesianas e generalizadas',
+        'Vínculos incorporados na escolha das coordenadas',
+        'Exemplos: pêndulo simples, pêndulo duplo, partícula em superfície',
+      ],
+      hours: 3, section: '7.3',
+    },
+    {
+      id: 'c7-4',
+      title: 'Equações de Lagrange',
+      difficulty: 'hard',
+      desc: 'Derivação das equações de movimento lagrangianas a partir do Princípio de Hamilton usando o Cálculo de Variações do Cap. 6.',
+      subtopics: [
+        'd/dt(∂L/∂q̇ᵢ) − ∂L/∂qᵢ = 0',
+        'Forças generalizadas Qᵢ para forças não conservativas',
+        'Exemplo: oscilador harmônico',
+        'Exemplo: pêndulo esférico',
+      ],
+      hours: 5, section: '7.4',
+    },
+    {
+      id: 'c7-5',
+      title: 'Aplicações da Dinâmica Lagrangiana',
+      difficulty: 'hard',
+      desc: 'Resolução de problemas variados usando as equações de Lagrange. Ênfase na escolha inteligente de coordenadas generalizadas.',
+      subtopics: [
+        'Partícula em campo central',
+        'Pêndulo com ponto de suporte móvel',
+        'Partícula sobre cunha deslizante',
+        'Sistema de dois corpos acoplados',
+        'Partícula em campo eletromagnético',
+      ],
+      hours: 5, section: '7.5',
+    },
+    {
+      id: 'c7-6',
+      title: 'Quantidades Conservadas e Coordenadas Cíclicas',
+      difficulty: 'medium',
+      desc: 'Teoremas de conservação emergem naturalmente da estrutura da Lagrangiana. Coordenadas cíclicas (ignoráveis) geram momentos conservados.',
+      subtopics: [
+        'Momento generalizado pᵢ = ∂L/∂q̇ᵢ',
+        'Coordenada cíclica → pᵢ = constante',
+        'Simetria de translação → conservação do momento linear',
+        'Simetria rotacional → conservação do momento angular',
+        'Invariância temporal → conservação da energia (função de energia h)',
+      ],
+      hours: 3, section: '7.6',
+    },
+    {
+      id: 'c7-7',
+      title: 'Equações de Hamilton (Canônicas)',
+      difficulty: 'hard',
+      desc: 'Transformada de Legendre da Lagrangiana para obter a Hamiltoniana H(qᵢ, pᵢ, t). As equações canônicas de Hamilton substituem as de Lagrange.',
+      subtopics: [
+        'Transformada de Legendre: H = Σ pᵢq̇ᵢ − L',
+        'Equações de Hamilton: q̇ᵢ = ∂H/∂pᵢ, ṗᵢ = −∂H/∂qᵢ',
+        'Espaço de fase (qᵢ, pᵢ)',
+        'H como energia total quando L não depende explicitamente de t',
+      ],
+      hours: 4, section: '7.7–7.8',
+    },
+    {
+      id: 'c7-8',
+      title: 'Teorema de Liouville e Espaço de Fase',
+      difficulty: 'hard',
+      desc: 'O volume no espaço de fase é preservado pelo fluxo hamiltoniano. Base da mecânica estatística clássica.',
+      subtopics: [
+        'Fluido de pontos no espaço de fase',
+        'Equação de continuidade no espaço de fase',
+        'Teorema de Liouville: dρ/dt = 0',
+        'Implicações para termodinâmica estatística',
+      ],
+      hours: 3, section: '7.9',
+    },
+  ],
+};
+
+/* ═══════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════ */
+const state = {
+  done: JSON.parse(localStorage.getItem('marion_done') || '{}'),
+  filter: 'all',
+  openId: null,
+};
+
+function persist() {
+  localStorage.setItem('marion_done', JSON.stringify(state.done));
+}
+
+/* ═══════════════════════════════════════════════
+   RENDER
+═══════════════════════════════════════════════ */
+function diffClass(d) {
+  return d === 'easy' ? 'diff-easy' : d === 'medium' ? 'diff-medium' : 'diff-hard';
+}
+function diffLabel(d) {
+  return d === 'easy' ? 'Fácil' : d === 'medium' ? 'Médio' : 'Difícil';
+}
+
+function buildCard(topic, cap) {
+  const isDone = !!state.done[topic.id];
+  const div = document.createElement('div');
+  div.className = `topic${isDone ? ' done' : ''}`;
+  div.dataset.id = topic.id;
+  div.dataset.cap = cap;
+
+  div.innerHTML = `
+    <div class="topic-header">
+      <div class="check-circle">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <div class="topic-title">${topic.title}</div>
+      <span class="difficulty ${diffClass(topic.difficulty)}">${diffLabel(topic.difficulty)}</span>
+    </div>
+    <div class="topic-body" id="body-${topic.id}">
+      <div class="topic-body-inner">
+        <p class="topic-desc">${topic.desc}</p>
+        <ul class="subtopics">
+          ${topic.subtopics.map(s => `<li>${s}</li>`).join('')}
+        </ul>
+        <div class="meta-row">
+          <span class="meta-pill">⏱ <strong>${topic.hours}h</strong> estimadas</span>
+          <span class="meta-pill">§ <strong>${topic.section}</strong></span>
+        </div>
+      </div>
+    </div>
+  `;
+
+  div.addEventListener('click', (e) => handleCardClick(e, topic.id));
+  return div;
+}
+
+function renderTimeline(cap) {
+  const container = document.getElementById(`timeline-${cap}`);
+  container.innerHTML = '';
+  data[cap].forEach(topic => {
+    container.appendChild(buildCard(topic, cap));
+  });
+}
+
+function applyFilter() {
+  const f = state.filter;
+  document.querySelectorAll('.topic').forEach(el => {
+    const cap = el.dataset.cap;
+    const id = el.dataset.id;
+    const isDone = !!state.done[id];
+
+    let visible = true;
+    if (f === 'cap6' && cap !== 'cap6') visible = false;
+    if (f === 'cap7' && cap !== 'cap7') visible = false;
+    if (f === 'done' && !isDone) visible = false;
+    if (f === 'pending' && isDone) visible = false;
+
+    el.classList.toggle('hidden', !visible);
+  });
+}
+
+function updateStats() {
+  const total = data.cap6.length + data.cap7.length;
+  const doneCap6 = data.cap6.filter(t => state.done[t.id]).length;
+  const doneCap7 = data.cap7.filter(t => state.done[t.id]).length;
+  const doneTotal = doneCap6 + doneCap7;
+  const pct = Math.round((doneTotal / total) * 100);
+
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statCap6').textContent = `${doneCap6}/${data.cap6.length}`;
+  document.getElementById('statCap7').textContent = `${doneCap7}/${data.cap7.length}`;
+  document.getElementById('statDone').textContent = doneTotal;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('pct').textContent = pct + '%';
+}
+
+/* ═══════════════════════════════════════════════
+   INTERACTIONS
+═══════════════════════════════════════════════ */
+function handleCardClick(e, id) {
+  const card = e.currentTarget;
+  const isCheckClick = e.target.closest('.check-circle');
+
+  if (isCheckClick) {
+    e.stopPropagation();
+    state.done[id] = !state.done[id];
+    persist();
+    card.classList.toggle('done', !!state.done[id]);
+    updateStats();
+    applyFilter();
+    return;
+  }
+
+  // Toggle expand
+  const bodyEl = document.getElementById(`body-${id}`);
+  const isOpen = bodyEl.classList.contains('open');
+
+  // Close all
+  document.querySelectorAll('.topic-body.open').forEach(b => b.classList.remove('open'));
+
+  if (!isOpen) {
+    bodyEl.classList.add('open');
+    state.openId = id;
+  } else {
+    state.openId = null;
+  }
+}
+
+/* ── Filters ── */
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.filter = btn.dataset.filter;
+    applyFilter();
+  });
+});
+
+/* ═══════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════ */
+renderTimeline('cap6');
+renderTimeline('cap7');
+updateStats();
+applyFilter();
+</script>
+</body>
+</html>
