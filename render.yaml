@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: cronograma-marion
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
+    plan: free
